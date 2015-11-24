@@ -839,4 +839,207 @@ record Feature {
   map<string> attributes = {};
 }
 
+
+/**
+ Enumeration of the possible genders.
+ */
+enum Gender {
+  Male,
+  Female,
+  Unknown
+}
+
+
+enum MeasureDataType {
+  Unknown,
+  Boolean,
+  Integer,
+  Decimal
+}
+
+
+record Batch {
+  /**
+   Creation date of this batch.
+
+   Stored as a number of milliseconds since the UNIX Epoch 
+   (Jan. 1st 1970 at 00:00:00 in UTC timezone).
+   */
+  union { null, long } batchDateEpoch = null;
+
+  /**
+   Type of the batch (e.g. sample batch, genotyping batch, etc).
+   */
+  union { null, string } batchType = null;
+
+  /**
+   Textual description of this batch.
+   */
+  union { null, string } description = null;
+}
+
+
+record Phenotype {
+  /**
+   Name of the phenotype (e.g. 'left lower extremity amputation').
+   */
+  union { null, string } name = null;
+
+  /**
+   Group of the phenotype (e.g. 'eye color').
+   */
+  union { null, string } phenotypeGroup = null;
+
+  /**
+   Type of the phenotype (e.g. 'measure', 'diagnosis', 'prescription').
+   */
+  union { null, string } phenotypeType = null;
+
+  /**
+   Qualitative ("0", or "1") or quantitative measure or observation on the 
+   individual.
+   */
+  union { null, string } measure = null;
+
+  /**
+   Native data type of the measure (e.g. 'boolean', 'integer', 'decimal').
+
+
+   */
+  MeasureDataType measureDataType = "Unknown";
+
+  /**
+   Units of the measure (e.g. 'umol/L', 'beats/minute').
+   */
+  union { null, string } measureUnits = null;
+
+  /**
+   Long description of the phenotype.
+   */
+  union { null, string } description = null;
+
+  /**
+   Date of the diagnosis (if any).
+
+   Stored as a number of milliseconds since the UNIX Epoch 
+   (Jan. 1st 1970 at 00:00:00 in UTC timezone).
+   */
+  union { null, long } diagnosisDateEpoch = null;
+}
+
+
+record Visit {
+  /**
+   Unique ID of the visit. Often useful to backtrack the visit on 
+   an external database.
+   */
+  union { null, string } visitId = null;
+
+  /**
+   Date of the visit.
+
+   Stored as a number of milliseconds since the UNIX Epoch 
+   (Jan. 1st 1970 at 00:00:00 in UTC timezone).
+   */
+  union { null, long } visitDateEpoch = null;
+
+  /**
+   ID of the consent form that the user signed at the visit.
+   */
+  union { null, string } studyId = null;
+
+  /**
+   Indicates if the patient was fasting or not during the visit
+   (null if unknown).
+   */
+  union { null, boolean } isFasting = null;
+
+  /**
+   Description of the visit.
+   */
+  union { null, string } description = null;
+
+  /**
+   An array containing all the phenotypes collected during the visit.
+   */
+  array<Phenotype> phenotypes = [];
+}
+
+
+record Individual {
+  /**
+   An array containing all the individual's genotypes.
+   */
+  array<Genotype> genotypes = [];
+
+  /**
+   The genetic gender of the individual.
+   */
+  Gender gender = "Unknown";
+  
+  /**
+   Unique ID of the individual. Often useful to backtrack the individual on 
+   an external database.
+   */
+  union { null, string } individualId = null;
+
+  /**
+   Unique ID of the family of the individual.
+   */
+  union { null, string } familyId = null;
+
+  /**
+   Unique ID of the father of the individual.
+   */
+  union { null, string } fatherId = null;
+
+  /**
+   Unique ID of the mother of the individual.
+   */
+  union { null, string } motherId = null;
+
+  /**
+   Birth date of this individual.
+
+   Stored as a number of milliseconds since the UNIX Epoch 
+   (Jan. 1st 1970 at 00:00:00 in UTC timezone).
+   */
+  union { null, long } birthDateEpoch = null;
+
+  /**
+   TODO: To be defined.
+   */
+  union { null, string } ethnicCode = null;
+
+  /**
+   TODO: To be defined. Clinic or Genotyping centre ?
+   */
+  union { null, string } centreName = null;
+
+  /**
+   Region where the individual originates from.
+   */
+  union { null, string } region = null;
+
+  /**
+   Country where the individual was born in.
+   */
+  union { null, string } country = null;
+
+  /**
+   Notes about the individual (e.g. sequencing/genotyping error, etc).
+   */
+  union { null, string } notes = null;
+
+  /**
+   An array containing all the individual's visits in clinics.
+   */
+  array<Visit> visits = [];
+  
+  /**
+   An array containing all the batches that the Individual belongs to.
+   */
+  array<Batch> batches = [];
+}
+
 }

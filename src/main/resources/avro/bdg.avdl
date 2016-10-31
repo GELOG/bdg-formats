@@ -592,6 +592,12 @@ record VariantCallingAnnotations {
 }
 
 record Genotype {
+  
+  /**
+   The variant identifier (RS number in studies).
+   */
+  union { null, string } variantIdentifier = null;
+
   /**
    The variant called at this site.
    */
@@ -1030,6 +1036,12 @@ record Individual {
    Notes about the individual (e.g. sequencing/genotyping error, etc).
    */
   union { null, string } notes = null;
+
+  /**
+   Missing call frequency of genotypes for this individual
+   */
+  union { null, float } missingCallFreq = null;
+
 
   /**
    An array containing all the individual's visits in clinics.
